@@ -1,6 +1,6 @@
 import React from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
-import { Card, CardHeader, CardBody, Heading } from '@chakra-ui/react'
+import { Card, CardHeader, CardBody, Heading, useToast } from '@chakra-ui/react'
 import { Input, HStack, Stack, InputRightElement, Button, InputGroup } from '@chakra-ui/react'
 import { useState } from 'react'
 import './register.css'
@@ -19,6 +19,8 @@ const Register = () => {
         name === 'password' ? setPassword(value) : setUsername(value);
     }
 
+    const toast = useToast();
+
     const submitHandler = () => {
         const body = {
             userName: username,
@@ -31,10 +33,14 @@ const Register = () => {
             })
             .catch((error) => {
                 const err = error.response?.data?.message || "Registration failed";
-                setErrorMsg(err);
-                setInterval(()=> {
-                    setErrorMsg('')
-                }, [3000])
+                toast({
+                    title: "Registration Error",
+                    description:err,
+                    status: "error",
+                    duration: 3000,
+                    position: 'top-right',
+                    isClosable: true,
+                });
             })
     }
 

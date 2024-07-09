@@ -31,7 +31,6 @@ const Login = ({setIsAuth}) => {
         .then((resp) => {
             window.localStorage.setItem("token", resp.data.token);
             navigate('/');
-            setIsAuth(true);
             toast({
                 title: "Logged In Successfully",
                 status: 'success',
@@ -44,7 +43,7 @@ const Login = ({setIsAuth}) => {
             console.log('error', error);
             toast({
                 title: "Login Error",
-                description: "Failed to log in. Please check your credentials and try again.",
+                description: error.message,
                 status: "error",
                 duration: 3000,
                 position: 'top-right',
