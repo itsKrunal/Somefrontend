@@ -1,4 +1,3 @@
-// apiUtils.js
 
 export const authHeaders = () => {
     const token = localStorage.getItem('token');
