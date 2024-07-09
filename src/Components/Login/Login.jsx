@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { Card, CardHeader, CardBody, Heading } from '@chakra-ui/react';
+import { Card, CardHeader, CardBody, Heading, useToast } from '@chakra-ui/react';
 import { Input, HStack, Stack, Text, InputRightElement, Button, InputGroup } from '@chakra-ui/react';
 import { useState } from 'react';
 import './login.css';
@@ -12,6 +12,7 @@ const Login = ({setIsAuth}) => {
     const handleClick = () => setShow(!show);
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
+    const toast = useToast();
     const [errorMsg, setErrorMsg] = useState(false);
 
     const changeHandler = (event) => {
@@ -26,19 +27,34 @@ const Login = ({setIsAuth}) => {
         }
 
         client
-            .post("/user/login", body)
-            .then((resp) => {
-                window.localStorage.setItem("token", resp.data.token);
-                navigate('/');
-                setIsAuth(true);
-            })
-            .catch((error) => { 
-                console.log('error', error); 
-                setErrorMsg(true);
-                setInterval(()=> {
-                    setErrorMsg('')
-                }, [3000])
+        .post("/user/login", body)
+        .then((resp) => {
+            window.localStorage.setItem("token", resp.data.token);
+            navigate('/');
+            setIsAuth(true);
+            toast({
+                title: "Logged In Successfully",
+                status: 'success',
+                duration: 3000,
+                position: 'top-right',
+                isClosable: true,
             });
+        })
+        .catch((error) => {
+            console.log('error', error);
+            toast({
+                title: "Login Error",
+                description: "Failed to log in. Please check your credentials and try again.",
+                status: "error",
+                duration: 3000,
+                position: 'top-right',
+                isClosable: true,
+            });
+            setErrorMsg(true);
+            setTimeout(() => {
+                setErrorMsg('');
+            }, 3000);
+        });
     }
 
     return (
