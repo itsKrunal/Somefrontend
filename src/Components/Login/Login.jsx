@@ -29,8 +29,8 @@ const Login = ({setIsAuth}) => {
             .post("/user/login", body)
             .then((resp) => {
                 window.localStorage.setItem("token", resp.data.token);
-                setIsAuth(true);
                 navigate('/');
+                setIsAuth(true);
             })
             .catch((error) => { 
                 console.log('error', error); 
