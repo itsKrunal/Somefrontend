@@ -1,0 +1,16 @@
+.form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: dodgerblue;
+}
+.bottom { 
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+body {
+    background-color: dodgerblue;
+}
