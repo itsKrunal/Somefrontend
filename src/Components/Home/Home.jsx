@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { client } from '../../Client';
 import { authHeaders } from '../../Utils';
-import { Box, Button, Table, Tbody, Td, Th, Thead, Tr, IconButton, useDisclosure, useToast, Flex } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, CardFooter, IconButton, useDisclosure, useToast, Flex, Text, Stack, Heading, SimpleGrid } from '@chakra-ui/react';
 import { FaPlay, FaPause, FaCheck } from 'react-icons/fa';
 import AddTodoModal from '../AddTodoModal/AddTodoModal';
 import { Puff } from 'react-loader-spinner';
@@ -90,7 +90,7 @@ const Home = () => {
     };
 
     const formatHours = (hours) => {
-        if (!hours) return "Not started yet!"
+        if (!hours) return "Not started yet!";
         if (hours < 1) {
             const minutes = Math.round(hours * 60);
             return `${minutes} minute${minutes !== 1 ? 's' : ''}`;
@@ -123,24 +123,17 @@ const Home = () => {
                         <Puff type="Oval" color="#00BFFF" height={50} width={50} />
                     </Flex>
                 )}
-                <Table variant="simple">
-                    <Thead>
-                        <Tr>
-                            <Th>Title</Th>
-                            <Th>Description</Th>
-                            <Th>Created At</Th>
-                            <Th>Time Used</Th>
-                            <Th>Actions</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {todos?.filter((item) => isCompleted ? item.isDone == true : !item.isDone).map((todo) => (
-                            <Tr key={todo._id}>
-                                <Td>{todo.title}</Td>
-                                <Td>{todo.description}</Td>
-                                <Td>{new Date(todo.createdAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', hour12: true })}</Td>
-                                <Td>{formatHours(todo.hours)}</Td>
-                                {isCompleted ? <Td>😊 All Set!</Td> : <Td>
+                <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={4}>
+                    {todos?.filter((item) => isCompleted ? item.isDone === true : !item.isDone).map((todo) => (
+                        <Card key={todo._id} boxShadow="lg" borderRadius="md">
+                            <CardBody>
+                                <Heading size="md" mb={2}>{todo.title}</Heading>
+                                <Text mb={2}>{todo.description}</Text>
+                                <Text mb={2}>Created At: {new Date(todo.createdAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', hour12: true })}</Text>
+                                <Text mb={2}>Time Used: {formatHours(todo.hours)}</Text>
+                            </CardBody>
+                            <CardFooter>
+                                <Flex justify="space-between" width="100%">
                                     {!todo.isOngoing ? (
                                         <IconButton
                                             aria-label="Start"
@@ -148,7 +141,6 @@ const Home = () => {
                                             onClick={() => handleStart(todo._id)}
                                             variant="outline"
                                             colorScheme="green"
-                                            mr={2}
                                             isDisabled={loading}
                                         />
                                     ) : (
@@ -158,7 +150,6 @@ const Home = () => {
                                             onClick={() => handlePause(todo._id)}
                                             variant="outline"
                                             colorScheme="orange"
-                                            mr={2}
                                             isDisabled={loading}
                                         />
                                     )}
@@ -170,11 +161,11 @@ const Home = () => {
                                         colorScheme="blue"
                                         isDisabled={loading}
                                     />
-                                </Td>}
-                            </Tr>
-                        ))}
-                    </Tbody>
-                </Table>
+                                </Flex>
+                            </CardFooter>
+                        </Card>
+                    ))}
+                </SimpleGrid>
             </Box>
         </Box>
     );
