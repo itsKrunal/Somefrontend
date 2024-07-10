@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { client } from '../../Client';
 import { authHeaders } from '../../Utils';
-import { Box, Button, Card, CardBody, CardFooter, IconButton, useDisclosure, useToast, Flex, Text, Stack, Heading, SimpleGrid } from '@chakra-ui/react';
-import { FaPlay, FaPause, FaCheck } from 'react-icons/fa';
+import { Box, Button, Card, CardBody, CardFooter, IconButton, useDisclosure, useToast, Flex, Text, Stack, Heading, SimpleGrid, Divider, Icon } from '@chakra-ui/react';
+import { FaPlay, FaPause, FaCheck, FaClock } from 'react-icons/fa';
 import AddTodoModal from '../AddTodoModal/AddTodoModal';
 import { Puff } from 'react-loader-spinner';
 
@@ -127,9 +127,15 @@ const Home = () => {
                     {todos?.filter((item) => isCompleted ? item.isDone === true : !item.isDone).map((todo) => (
                         <Card key={todo._id} boxShadow="lg" borderRadius="md">
                             <CardBody>
-                                <Heading size="md" mb={2}>{todo.title}</Heading>
+                                <Flex justifyContent="space-between" alignItems="center" mb={2}>
+                                    <Heading size="md">{todo.title}</Heading>
+                                    <Flex alignItems="center">
+                                        <Icon as={FaClock} mr={1} />
+                                        <Text>{new Date(todo.createdAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', hour12: true })}</Text>
+                                    </Flex>
+                                </Flex>
+                                <Divider my={2} />
                                 <Text mb={2}>{todo.description}</Text>
-                                <Text mb={2}>Created At: {new Date(todo.createdAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', hour12: true })}</Text>
                                 <Text mb={2}>Time Used: {formatHours(todo.hours)}</Text>
                             </CardBody>
                             <CardFooter>
